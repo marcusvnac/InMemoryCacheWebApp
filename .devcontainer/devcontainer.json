@@ -18,7 +18,8 @@
 		"ghcr.io/gvatsal60/dev-container-features/sonarlint:1": {},
 		"ghcr.io/devcontainers-extra/features/markdownlint-cli:1": {
 			"version": "latest"
-		}
+		},
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {}
 	}
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
