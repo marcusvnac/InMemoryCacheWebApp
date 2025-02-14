@@ -1,7 +1,8 @@
-package server
+package server_test
 
 import (
 	"bytes"
+	"cacheapp/server"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -24,7 +25,7 @@ func MustSetKeyUsingHandle(t *testing.T, bucket, key string, value []byte) {
 	require.NoError(t, err)
 
 	rr := httptest.NewRecorder()
-	handler := http.HandlerFunc(SetKeyHandler)
+	handler := http.HandlerFunc(server.SetKeyHandler)
 	handler.ServeHTTP(rr, req)
 
 	require.Equal(t, http.StatusOK, rr.Code)
@@ -41,7 +42,7 @@ func TestGetKeyHandler(t *testing.T) {
 	assert.NoError(t, err)
 
 	rr := httptest.NewRecorder()
-	handler := http.HandlerFunc(GetKeyHandler)
+	handler := http.HandlerFunc(server.GetKeyHandler)
 	handler.ServeHTTP(rr, req)
 
 	assert.Equal(t, http.StatusOK, rr.Code)
@@ -54,7 +55,7 @@ func TestGetKeyHandlerNotFound(t *testing.T) {
 	assert.NoError(t, err)
 
 	rr := httptest.NewRecorder()
-	handler := http.HandlerFunc(GetKeyHandler)
+	handler := http.HandlerFunc(server.GetKeyHandler)
 	handler.ServeHTTP(rr, req)
 
 	assert.Equal(t, http.StatusNotFound, rr.Code)
@@ -68,7 +69,7 @@ func TestGetCacheStatsHandler(t *testing.T) {
 	assert.NoError(t, err)
 
 	rr := httptest.NewRecorder()
-	handler := http.HandlerFunc(GetCacheStatsHandler)
+	handler := http.HandlerFunc(server.GetCacheStatsHandler)
 	handler.ServeHTTP(rr, req)
 
 	assert.Equal(t, http.StatusOK, rr.Code)
