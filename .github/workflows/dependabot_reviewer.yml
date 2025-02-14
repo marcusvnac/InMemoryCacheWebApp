@@ -1,0 +1,41 @@
+name: Dependabot reviewer
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - go.mod
+      - .github/workflows/**
+
+permissions:
+  pull-requests: write
+  contents: write
+
+jobs:
+  review-dependabot-pr:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.pull_request.user.login == 'dependabot[bot]' }}
+    # yamllint disable rule:line-length
+    steps:
+      - name: Dependabot metadata
+        id: dependabot-metadata
+        uses: dependabot/fetch-metadata@v2.2.0
+      - name: Enable auto-merge for Dependabot PRs
+        run: gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - name: Approve patch and minor updates
+        if: ${{steps.dependabot-metadata.outputs.update-type == 'version-update:semver-patch' || steps.dependabot-metadata.outputs.update-type == 'version-update:semver-minor'}}
+        run: gh pr review "$PR_URL" --approve -b "This PR was automatically approved because it includes only a **patch or minor update**"
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - name: Comment on major dependencies updates and add reviewer
+        if: ${{steps.dependabot-metadata.outputs.update-type == 'version-update:semver-major'}}
+        run: |
+          gh pr comment "$PR_URL" --body "This PR was not automatically approved because it includes a **major update of a dependency**"
+          gh pr edit "$PR_URL" --add-reviewer "kohofinancial/caipininjas-backend"
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
