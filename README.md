@@ -1,8 +1,8 @@
 # InMemoryCacheWebApp
 
-This Go WebAPI application with an in-memory cache implementation is part of a code assessment for Minerva.
+This is a Go WebAPI application featuring an in-memory cache implementation. This exercise is part of a code assessment for Minerva.
 
-It implements a HTTP WebAPI Appliocation with an in-memory cache that can hold a maximum of 255 keys that satisfies the interface given below.
+It implements an HTTP WebAPI application with an in-memory cache that can hold a maximum of 255 keys, satisfying the interface provided below.
 
 ```go
 go
